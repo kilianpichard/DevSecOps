@@ -4,7 +4,7 @@ on:
     branches:
        - main
 jobs:
-  DockerImage:
+  MyProject:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +23,6 @@ jobs:
         with:
           file: deploy/prod/Dockerfile
           context: src
-          platforms: linux/amd64,linux/arm64, darwin/arm64, darwin/amd64
+          platforms: linux/amd64,linux/arm64, darwin/amd64
           push: true
           tags: ief2i/my-project:latest
