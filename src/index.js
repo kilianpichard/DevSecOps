@@ -1,6 +1,6 @@
 const express = require('express');
 const app     = express();
-const port    = 80;
+const port    = 8080;
 const square = require("./lib/square")
 
 app.disable("x-powered-by")
@@ -14,9 +14,15 @@ app.get('/square/:nb', (req, res) => {
 	res.send(square(parseInt(nb)).toString());
 });
 
+let server;
 
-app.listen(port,() => {
+server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
-module.exports = app
+module.exports = {
+    app,
+    closeServer: () => {
+        server.close();
+    }
+};
