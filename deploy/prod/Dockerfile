@@ -2,8 +2,8 @@ FROM node:alpine
 
 RUN apk update && apk upgrade --no-cache && apk add --no-cache curl
 WORKDIR /app
-COPY . /app
-RUN npm i
+COPY . .
+RUN npm i --ignore-scripts
 USER node
 
 ENTRYPOINT ["node"]
