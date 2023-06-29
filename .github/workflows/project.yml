@@ -4,7 +4,18 @@ on:
     branches:
        - main
 jobs:
-  Build:
+  Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+      - name: Do tests
+        run: cd src && npm test
+
+  Builds:
+    needs: Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
