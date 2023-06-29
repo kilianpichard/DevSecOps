@@ -12,7 +12,10 @@ jobs:
       - name: Install NodeJS
         uses: actions/setup-node@v3
       - name: Do tests
-        run: cd src && npm test
+        run: |
+          cd src
+          npm i
+          npm test
 
   Builds:
     needs: Tests
