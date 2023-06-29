@@ -11,8 +11,7 @@ app.get('/', (req, res) => {
 
 app.get('/square/:nb', (req, res) => {
 	const nb = req.params.nb
-	res.write(square(parseInt(nb)))
-	res.end()
+	res.send(square(parseInt(nb)).toString());
 });
 
 
