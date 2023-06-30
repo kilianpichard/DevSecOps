@@ -9,5 +9,5 @@ USER node
 ENTRYPOINT ["node"]
 CMD ["index.js"]
 
-EXPOSE 80
-HEALTHCHECK --interval=1m --timeout=20s --retries=3 CMD curl --fail http://localhost:80 || exit 1
+EXPOSE 3001
+HEALTHCHECK --interval=1m --timeout=20s --retries=3 CMD curl --fail http://localhost:3001 || exit 1
