@@ -89,6 +89,9 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
   Users.findOne({ where: { email } }).then((user) => {
+    if (!user) {
+      res.send(login + "<br><br><p style='color:red'>Email not found</p>");
+    }
     bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
         // create access token
