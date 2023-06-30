@@ -3,7 +3,7 @@ FROM node:alpine
 RUN apk update && apk upgrade --no-cache && apk add --no-cache curl
 WORKDIR /app
 COPY ./src .
-RUN npm i --ignore-scripts
+RUN npm install --production
 USER node
 
 ENTRYPOINT ["node"]
