@@ -61,5 +61,5 @@ jobs:
           echo "${{ secrets.EC2_SSH }}" > private_key && chmod 600 private_key
           
       - name: SSH and run script
-        run: ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "doas ./scripts/mds-devsecops/update-mds-devsecops"
+        run: ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "doas /scripts/mds-devsecops/update-mds-devsecops"
 
