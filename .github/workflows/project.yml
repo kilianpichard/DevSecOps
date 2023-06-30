@@ -16,6 +16,11 @@ jobs:
           cd src
           npm i
           npm test
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
 
   Builds:
     needs: Tests
@@ -40,3 +45,21 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: kilianpichard/devsecops:latest
+
+  deploy:
+    needs: Builds 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install SSH client
+        run: sudo apt-get update && sudo apt-get install openssh-client -y
+
+      - name: Setup SSH
+        run: |
+          echo "${{ secrets.EC2_SSH }}" > private_key && chmod 600 private_key
+          
+      - name: SSH and run script
+        run: ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "doas ./scripts/curators/update-production"
+

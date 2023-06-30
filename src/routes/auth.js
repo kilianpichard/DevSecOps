@@ -9,6 +9,7 @@ router.get("/login", (req, res) => {
   const cookies = req.headers.cookie;
   if (!cookies || !cookies.includes("jwt=")) {
     res.send(login);
+    return;
   }
   const access = cookies.split("jwt=")[1].split(";")[0];
 
@@ -25,6 +26,7 @@ router.get("/register", (req, res) => {
   const cookies = req.headers.cookie;
   if (!cookies || !cookies.includes("jwt=")) {
     res.send(register);
+    return;
   }
   const access = cookies.split("jwt=")[1].split(";")[0];
 
@@ -41,6 +43,7 @@ router.get("/loggedIn", (req, res) => {
   const cookies = req.headers.cookie;
   if (!cookies || !cookies.includes("jwt=")) {
     res.redirect("/login");
+    return;
   }
   const access = cookies.split("jwt=")[1].split(";")[0];
 
@@ -68,6 +71,7 @@ router.post("/register", (req, res) => {
       password: hash,
     })
       .then(async (user) => {
+        console.log(user);
         // create access token
         const accessToken = await jwt.sign(
           { email: user.email, id: user.id },
@@ -77,20 +81,29 @@ router.post("/register", (req, res) => {
         res.redirect("/loggedIn");
       })
       .catch((err) => {
-        if (err.errors[0].message === "email must be unique") {
-          res.send(
+        res
+          .status(400)
+          .send(
             register + "<br><br><p style='color:red'>Email already exists</p>"
           );
-        }
       });
   });
 });
 
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
+  if (!email) {
+    res
+      .status(404)
+      .send(login + "<br><br><p style='color:red'>Email not found</p>");
+    return;
+  }
   Users.findOne({ where: { email } }).then((user) => {
     if (!user) {
-      res.send(login + "<br><br><p style='color:red'>Email not found</p>");
+      res
+        .status(404)
+        .send(login + "<br><br><p style='color:red'>Email not found</p>");
+      return;
     }
     bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
@@ -102,7 +115,9 @@ router.post("/login", (req, res) => {
         res.cookie("jwt", accessToken);
         res.redirect("/loggedIn");
       } else {
-        res.send(login + "<br><br><p style='color:red'>Wrong password</p>");
+        res
+          .status(400)
+          .send(login + "<br><br><p style='color:red'>Wrong password</p>");
       }
     });
   });

@@ -5,6 +5,16 @@ const port = 3001;
 
 const authRoutes = require("./routes/auth");
 const squareRoutes = require("./routes/square");
+const sequelize = require("./instances/sequelize");
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connection has been established successfully.");
+  })
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
+  });
 
 app.disable("x-powered-by");
 
